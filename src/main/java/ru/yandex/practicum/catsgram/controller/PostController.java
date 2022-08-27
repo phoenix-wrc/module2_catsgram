@@ -20,8 +20,19 @@ public class PostController {
     private final static Logger log = LoggerFactory.getLogger(PostController.class);
 
     @GetMapping("/posts")
-    public List<Post> findAll() {
-        List<Post> out = postService.findAll();
+    public List<Post> findAll(
+            @RequestParam(value = "sort", defaultValue = "asc", required = false) String sort,
+            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) Integer size
+    ) {
+        if (!(sort.equals("asc") || sort.equals("desc"))) {
+            throw  new IllegalArgumentException();
+        }
+        if(size < 0 || page <= 0) {
+            throw new IllegalArgumentException();
+        }
+        Integer from = size * page;
+        List<Post> out = postService.findAll(size, sort, from);
         log.debug("Текущее количество постов: {}", out.size());
         return out;
     }

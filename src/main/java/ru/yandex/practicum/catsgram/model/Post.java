@@ -1,6 +1,7 @@
 package ru.yandex.practicum.catsgram.model;
 
 import java.time.Instant;
+import java.util.Objects;
 
 public class Post {
     private Integer id;
@@ -47,5 +48,18 @@ public class Post {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post)) return false;
+        Post post = (Post) o;
+        return getId().equals(post.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
